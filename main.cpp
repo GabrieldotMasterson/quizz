@@ -40,15 +40,29 @@ void PrintQuestion(Question q) {
 }
 
 void WriteRanking(const string& firstName, int score) {
-    ofstream outputFile("ranking.txt", ios::app);
+    ifstream inputFile("ranking.txt");
+    vector<pair<string, int>> ranking;
+    string name;
+    int existingScore;
 
-    if (!outputFile.is_open()) {
-        cout << "Erro: Arquivo 'ranking.txt' nao encontrado ou invalido." << endl;
-        return;
+    while (inputFile >> name >> existingScore) {
+        if (name == firstName) {
+            score = max(score, existingScore);
+            name = ""; 
+        } else {
+            ranking.push_back({name, existingScore});
+        }
     }
+    inputFile.close();
 
-    outputFile << firstName << " " << score << endl;
-    outputFile.close(); 
+    ranking.push_back({firstName, score});
+
+    // rewrite the ranking file, esier to do it this way
+    ofstream outputFile("ranking.txt", ios::trunc);
+    for (const auto& entry : ranking) {
+        outputFile << entry.first << " " << entry.second << endl;
+    }
+    outputFile.close();
 }
 
 void PrintRanking() {
