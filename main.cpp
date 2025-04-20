@@ -121,7 +121,13 @@ int main(){
             cout << "Digite sua resposta: ";
             char answer;
             cin >> answer;
-            if (toupper(answer) == quiz[i].correctAnswer) {
+            answer = toupper(answer);
+            while(answer < 'A' || answer > 'D') { // ascii saving the day
+                cout << "Opcao invalida. Digite novamente (A-D):";
+                cin >> answer;
+                answer = toupper(answer);
+            }
+            if (answer == quiz[i].correctAnswer) {
                 cout << "Correto!" << endl;
                 score++;
             } else {
